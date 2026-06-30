@@ -1,8 +1,11 @@
 :root {
   color-scheme: dark;
   font-family: "Segoe UI", Roboto, sans-serif;
-  background: linear-gradient(135deg, #006400f2, #f59e0b);
   color: #f9fafb;
+  background-image: url("images/backgroud.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 * { box-sizing: border-box; }
@@ -12,6 +15,11 @@ body {
   display: grid;
   place-items: center;
   padding: 24px;
+  background-image: url("images/backgroud.png");
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
 .app {
