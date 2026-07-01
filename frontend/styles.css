@@ -3,7 +3,7 @@
   font-family: "Segoe UI", Roboto, sans-serif;
   color: #f9fafb;
   background-image: url("images/backgroud.png");
-  background-size: cover;
+  background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
 }
@@ -23,25 +23,105 @@ body {
 }
 
 .app {
-  width: min(92vw, 720px);
+  width: min(92vw, 760px);
 }
 
 .panel {
-  background: #006400f2;
-  border: 2px solid #f59e0b;
-  border-radius: 24px;
+  background: linear-gradient(145deg, rgba(10, 34, 10, 0.97), rgba(0, 80, 0, 0.95));
+  border: 2px solid #ffd166;
+  border-radius: 28px;
   padding: 28px;
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45), inset 0 0 20px rgba(255, 209, 102, 0.15);
+  backdrop-filter: blur(4px);
+  position: relative;
+  overflow: hidden;
+}
+
+.panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top, rgba(255, 209, 102, 0.18), transparent 45%);
+  pointer-events: none;
+}
+
+.hero-panel {
+  text-align: center;
+}
+
+.hero-icon {
+  font-size: 3.5rem;
+  margin-bottom: 12px;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin: 24px 0 16px;
+}
+
+.button {
+  border: none;
+  border-radius: 999px;
+  padding: 12px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  color: white;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
+}
+
+.button--primary {
+  background: #f59e0b;
+}
+
+.button--secondary {
+  background: #1f2937;
+}
+
+.helper-text {
+  margin: 0;
+  color: #fef3c7;
+  font-size: 0.95rem;
+}
+
+.is-hidden {
+  display: none !important;
 }
 
 h1 { margin: 0 0 8px; font-size: 2rem; }
+h2 { margin: 0 0 8px; font-size: 1.5rem; }
 .subtitle { margin: 0 0 20px; color: #d1d5db; }
+
+@keyframes reelPulse {
+  from { transform: scale(1); box-shadow: inset 0 0 16px rgba(255,255,255,0.2), 0 8px 22px rgba(0,0,0,0.2); }
+  to { transform: scale(1.03); box-shadow: inset 0 0 24px rgba(255,255,255,0.3), 0 12px 28px rgba(0,0,0,0.28); }
+}
+
+@keyframes winGlow {
+  0%, 100% { box-shadow: 0 0 0 rgba(255, 215, 0, 0.0); }
+  50% { box-shadow: 0 0 26px rgba(255, 215, 0, 0.55); }
+}
+
+.panel.is-winning {
+  animation: winGlow 0.8s ease-in-out infinite;
+}
 
 .status-box, .result {
   border-radius: 14px;
   padding: 12px 14px;
-  background: #c57b0d;
+  background: linear-gradient(135deg, #7a3b00, #c57b0d);
   margin-bottom: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: inset 0 1px 4px rgba(255,255,255,0.18);
+  font-weight: 600;
+  letter-spacing: 0.02em;
 }
 
 .reels {
@@ -49,18 +129,28 @@ h1 { margin: 0 0 8px; font-size: 2rem; }
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;
   margin-bottom: 20px;
+  padding: 16px;
+  border-radius: 24px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(0,0,0,0.18));
+  border: 1px solid rgba(255,255,255,0.12);
 }
 
 .reel {
-  background: #3ea76a;
-  border: 2px solid #f59e0b;
-  border-radius: 18px;
-  min-height: 120px;
+  background: radial-gradient(circle at top, #6ee7b7, #166534 70%);
+  border: 2px solid #ffd166;
+  border-radius: 20px;
+  min-height: 130px;
   display: grid;
   place-items: center;
-  font-size: 2.4rem;
-  font-weight: 700;
-  transition: transform 0.12s ease;
+  font-size: 2.6rem;
+  font-weight: 800;
+  transition: transform 0.12s ease, box-shadow 0.2s ease;
+  box-shadow: inset 0 0 16px rgba(255,255,255,0.2), 0 8px 22px rgba(0,0,0,0.2);
+  text-shadow: 0 2px 8px rgba(0,0,0,0.25);
+}
+
+.reel.is-spinning {
+  animation: reelPulse 0.16s infinite alternate;
 }
 
 .controls {
@@ -75,9 +165,83 @@ button {
   padding: 10px 16px;
   font-size: 1rem;
   cursor: pointer;
-  background: #f59e0b;
+  background: linear-gradient(135deg, #f59e0b, #ffbf47);
   color: white;
+  box-shadow: 0 8px 18px rgba(245, 158, 11, 0.25);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
 }
 
-button.primary { background: #f59e0b; }
-button:hover { transform: translateY(-1px); }
+button.primary { background: linear-gradient(135deg, #dc2626, #ef4444); }
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+  filter: brightness(1.05);
+}
+button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* ============================================================
+   Win Effect Classes (AnimEngine — Task 7.3)
+   ============================================================ */
+
+@keyframes winPulseMajor {
+  0%, 100% { box-shadow: 0 0 8px 2px rgba(255, 215, 0, 0.4), inset 0 0 16px rgba(255,215,0,0.2); }
+  50%       { box-shadow: 0 0 32px 10px rgba(255, 215, 0, 0.85), inset 0 0 28px rgba(255,215,0,0.5); }
+}
+
+@keyframes winPulseMinor {
+  0%, 100% { box-shadow: 0 0 8px 2px rgba(192, 192, 192, 0.4), inset 0 0 16px rgba(192,192,192,0.2); }
+  50%       { box-shadow: 0 0 28px 8px rgba(192, 192, 192, 0.8), inset 0 0 24px rgba(192,192,192,0.45); }
+}
+
+.win-pulse-major {
+  animation: winPulseMajor 0.6s ease-in-out infinite;
+}
+
+.win-pulse-minor {
+  animation: winPulseMinor 0.6s ease-in-out infinite;
+}
+
+/* Particle system — absolutely positioned inside the reels container */
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: particleFly var(--particle-duration, 1s) ease-out forwards;
+}
+
+@keyframes particleFly {
+  0%   { opacity: 1; transform: translate(0, 0) scale(1); }
+  100% { opacity: 0; transform: translate(var(--tx, 0px), var(--ty, -60px)) scale(0.4); }
+}
+
+/* Win overlay — shown during major/minor win */
+.win-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.55);
+  border-radius: 24px;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.win-overlay.is-hidden {
+  display: none !important;
+}
+
+.win-overlay__message {
+  font-size: clamp(2rem, 8vw, 3.5rem);
+  font-weight: 900;
+  color: #ffd166;
+  text-shadow: 0 0 24px rgba(255, 209, 102, 0.85), 0 3px 8px rgba(0,0,0,0.6);
+  letter-spacing: 0.08em;
+  text-align: center;
+  padding: 0 16px;
+}

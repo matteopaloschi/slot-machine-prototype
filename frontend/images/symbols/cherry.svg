@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <rect width="128" height="128" rx="12" fill="#1a1a2e"/>
+  <!-- Stem -->
+  <path d="M64 32 C64 32 55 55 42 58" stroke="#228B22" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M64 32 C64 32 73 55 86 58" stroke="#228B22" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <!-- Left cherry -->
+  <circle cx="42" cy="72" r="18" fill="#CC0000" stroke="#8B0000" stroke-width="2"/>
+  <circle cx="36" cy="65" r="4" fill="#FF4444" opacity="0.5"/>
+  <!-- Right cherry -->
+  <circle cx="86" cy="72" r="18" fill="#CC0000" stroke="#8B0000" stroke-width="2"/>
+  <circle cx="80" cy="65" r="4" fill="#FF4444" opacity="0.5"/>
+</svg>

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <rect width="128" height="128" rx="12" fill="#1a1a2e"/>
+  <!-- Lemon body -->
+  <ellipse cx="64" cy="68" rx="42" ry="34" fill="#FFE135" stroke="#D4A000" stroke-width="2"/>
+  <!-- Tips -->
+  <ellipse cx="22" cy="68" rx="8" ry="6" fill="#FFE135" stroke="#D4A000" stroke-width="2"/>
+  <ellipse cx="106" cy="68" rx="8" ry="6" fill="#FFE135" stroke="#D4A000" stroke-width="2"/>
+  <!-- Shine -->
+  <ellipse cx="50" cy="52" rx="10" ry="6" fill="#FFFACD" opacity="0.5" transform="rotate(-15 50 52)"/>
+  <!-- Leaf -->
+  <ellipse cx="64" cy="30" rx="6" ry="12" fill="#228B22" transform="rotate(20 64 30)"/>
+</svg>

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <rect width="128" height="128" rx="12" fill="#1a1a2e"/>
+  <!-- BAR plate -->
+  <rect x="14" y="44" width="100" height="40" rx="6" fill="#C0A000" stroke="#FFD700" stroke-width="2"/>
+  <text x="50%" y="69%" dominant-baseline="middle" text-anchor="middle"
+        font-family="Arial Black, sans-serif" font-size="36" font-weight="900"
+        fill="#1a1a2e" letter-spacing="2">BAR</text>
+</svg>
