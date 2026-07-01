@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { getSerialCommandsForOutcome, state } from '../app.js';
+import { getSerialCommandsForOutcome, getSerialConnectionErrorMessage, state } from '../app.js';
 
 describe('Arduino round reset flow', () => {
   beforeEach(() => {
@@ -17,5 +17,11 @@ describe('Arduino round reset flow', () => {
 
   it('does not emit serial commands in simulation mode', () => {
     expect(getSerialCommandsForOutcome('major')).toEqual([]);
+  });
+
+  it('formats common serial connection errors for the user', () => {
+    expect(getSerialConnectionErrorMessage('Failed to execute \'open\' on \'SerialPort\': Failed to open serial port.')).toContain('porta serial');
+    expect(getSerialConnectionErrorMessage('The port is already in use.')).toContain('já está em uso');
+    expect(getSerialConnectionErrorMessage('The port is not available.')).toContain('não está disponível');
   });
 });

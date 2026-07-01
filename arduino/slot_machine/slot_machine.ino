@@ -33,9 +33,7 @@ Servo prizeServo;
 
 bool tokenInserted = false;
 bool gameActive = false;
-bool lastButtonState = HIGH;
-unsigned long lastDebounceTime = 0;
-const unsigned long DEBOUNCE_DELAY_MS = 250;
+bool buttonHeld = false;
 
 void setup() {
   pinMode(TRIG_PIN, OUTPUT);
@@ -46,6 +44,9 @@ void setup() {
 
   digitalWrite(TRIG_PIN, LOW);
   digitalWrite(TOKEN_LED_PIN, LOW);
+  digitalWrite(LED_PIN, LOW);
+
+  buttonHeld = false;
 
   prizeServo.attach(SERVO_PIN);
   prizeServo.write(0);
@@ -117,12 +118,11 @@ void handleTokenSensor() {
 
 void handleButton() {
   bool currentState = digitalRead(BUTTON_PIN);
-  if (currentState != lastButtonState) {
-    lastDebounceTime = millis();
-  }
 
-  if ((millis() - lastDebounceTime) > DEBOUNCE_DELAY_MS) {
-    if (currentState == LOW && lastButtonState == HIGH) {
+  if (currentState == LOW) {
+    if (!buttonHeld) {
+      buttonHeld = true;
+
       if (tokenInserted) {
         if (!gameActive) {
           gameActive = true;
@@ -135,9 +135,9 @@ void handleButton() {
         }
       }
     }
+  } else {
+    buttonHeld = false;
   }
-
-  lastButtonState = currentState;
 }
 
 void handleSerial() {

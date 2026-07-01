@@ -934,7 +934,8 @@ async function connectArduino() {
   }
 
   try {
-    serialPort = await navigator.serial.requestPort();
+    const availablePorts = navigator.serial.getPorts ? await navigator.serial.getPorts() : [];
+    serialPort = availablePorts[0] || await navigator.serial.requestPort();
     await serialPort.open({ baudRate: 9600 });
 
     const textDecoder = new TextDecoderStream();
@@ -962,7 +963,7 @@ async function connectArduino() {
 
     readFromArduino();
   } catch (error) {
-    const message = `Falha ao conectar: ${error.message}`;
+    const message = `Falha ao conectar: ${getSerialConnectionErrorMessage(error)}`;
     setStatus(message);
     setHomeStatus(message);
   }
@@ -1060,6 +1061,28 @@ function handleSerialDisconnect() {
   serialLineBuffer = '';
 
   return Promise.resolve();
+}
+
+function getSerialConnectionErrorMessage(error) {
+  const message = (error && error.message ? error.message : String(error || '')).toLowerCase();
+
+  if (message.includes('failed to execute \'open\' on \'serialport\'') || message.includes('failed to open serial port')) {
+    return 'Não foi possível abrir a porta serial. Verifique se a placa está conectada, a porta está correta e nenhuma outra aplicação está usando a conexão.';
+  }
+
+  if (message.includes('already in use') || message.includes('port is already in use')) {
+    return 'A porta serial já está em uso por outra aplicação. Feche o programa que estiver usando o Arduino e tente novamente.';
+  }
+
+  if (message.includes('not available') || message.includes('port is not available')) {
+    return 'A porta serial não está disponível no momento. Reconecte a placa ou atualize a lista de portas do navegador.';
+  }
+
+  if (message.includes('not found')) {
+    return 'Nenhuma porta serial compatível foi encontrada. Confirme se o Arduino está conectado e reconhecido pelo sistema.';
+  }
+
+  return `Falha na conexão com o Arduino: ${error && error.message ? error.message : error}`;
 }
 
 function getSerialCommandsForOutcome(outcomeType) {
@@ -1193,5 +1216,6 @@ export {
   connectArduino,
   processSerialLine,
   getSerialCommandsForOutcome,
+  getSerialConnectionErrorMessage,
   handleSerialDisconnect,
 };

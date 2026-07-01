@@ -1,6 +1,8 @@
-// Sketch de DIAGNÓSTICO — usar apenas para testar se o botão físico
-// está fisicamente funcionando no pino 2. Não é o sketch final do projeto.
+// Sketch de diagnóstico mantido apenas como referência.
+// Este arquivo foi desativado para evitar conflitos de compilação com o sketch principal.
+// O arquivo principal é slot_machine.ino.
 
+#if 0
 const int BUTTON_PIN = 2;
 const int TOKEN_LED_PIN = 8;
 
@@ -23,3 +25,4 @@ void loop() {
 
   delay(300);
 }
+#endif
