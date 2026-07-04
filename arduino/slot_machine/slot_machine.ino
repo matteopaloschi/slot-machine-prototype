@@ -1,4 +1,5 @@
 #include <Servo.h>
+#include <Stepper.h>
 
 // =====================================================================
 // Caça-níquel - Festa Junina - Arduino Uno
@@ -11,9 +12,23 @@
 const int TRIG_PIN = 6;
 const int ECHO_PIN = 7;
 const int BUTTON_PIN = 2;
-const int SERVO_PIN = 9;
+const int SERVO_PIN = 4; 
+const int BUZZER_PIN = 3;
 const int LED_PIN = LED_BUILTIN;
-const int TOKEN_LED_PIN = 8;  // aceso quando a ficha foi lida, apagado quando não
+const int TOKEN_LED_PIN = 5;  // aceso quando a ficha foi lida, apagado quando não 
+
+// Controle dos motores de liberação do prêmio
+const int SERVO_NEUTRAL_ANGLE = 180;
+const int SERVO_RELEASE_ANGLE = 0;
+const unsigned long SERVO_RELEASE_DELAY_MS = 600;
+
+const int STEPPER_PIN_1 = 8;
+const int STEPPER_PIN_2 = 9; 
+const int STEPPER_PIN_3 = 10;
+const int STEPPER_PIN_4 = 11;
+const int STEPS_PER_REVOLUTION = 2048;
+const int STEPS_TO_RELEASE = 1024;
+const unsigned long STEPPER_RELEASE_DELAY_MS = 600;
 
 // Distância máxima (em cm) para considerar que uma ficha foi inserida.
 // 4.00cm é válido, 4.01cm em diante NÃO é considerado leitura de ficha.
@@ -30,6 +45,7 @@ unsigned long tokenDetectStartTime = 0;
 bool tokenDetecting = false;
 
 Servo prizeServo;
+Stepper prizeStepper(STEPS_PER_REVOLUTION, STEPPER_PIN_1, STEPPER_PIN_2, STEPPER_PIN_3, STEPPER_PIN_4);
 
 bool tokenInserted = false;
 bool gameActive = false;
@@ -39,6 +55,7 @@ void setup() {
   pinMode(TRIG_PIN, OUTPUT);
   pinMode(ECHO_PIN, INPUT);
   pinMode(BUTTON_PIN, INPUT_PULLUP);
+  pinMode(BUZZER_PIN, OUTPUT);
   pinMode(LED_PIN, OUTPUT);
   pinMode(TOKEN_LED_PIN, OUTPUT);
 
@@ -49,7 +66,8 @@ void setup() {
   buttonHeld = false;
 
   prizeServo.attach(SERVO_PIN);
-  prizeServo.write(0);
+  prizeServo.write(SERVO_NEUTRAL_ANGLE);
+  prizeStepper.setSpeed(10);
 
   Serial.begin(9600);
   Serial.println("Slot machine ready");
@@ -179,16 +197,35 @@ void handleSerial() {
   }
 }
 
+void playBuzzerPattern(int beeps, int intervalMs, int totalDurationMs) {
+  unsigned long startTime = millis();
+  int beepCount = 0;
+
+  while (millis() - startTime < totalDurationMs) {
+    if (beepCount < beeps) {
+      digitalWrite(BUZZER_PIN, HIGH);
+      delay(150);
+      digitalWrite(BUZZER_PIN, LOW);
+      delay(intervalMs);
+      beepCount++;
+    } else {
+      delay(50);
+    }
+  }
+}
+
 void releasePrize(bool major) {
   if (major) {
-    prizeServo.write(90);
-    delay(450);
-    prizeServo.write(0);
+    prizeStepper.step(STEPS_TO_RELEASE);
+    delay(STEPPER_RELEASE_DELAY_MS);
+    prizeStepper.step(-STEPS_TO_RELEASE);
+    playBuzzerPattern(5, 300, 3000);
     Serial.println("PRIZE_MAJOR");
   } else {
-    prizeServo.write(45);
-    delay(300);
-    prizeServo.write(0);
+    prizeServo.write(SERVO_RELEASE_ANGLE);
+    delay(SERVO_RELEASE_DELAY_MS);
+    prizeServo.write(SERVO_NEUTRAL_ANGLE);
+    playBuzzerPattern(3, 300, 1500);
     Serial.println("PRIZE_MINOR");
   }
 }
